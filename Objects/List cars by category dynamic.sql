@@ -1,0 +1,28 @@
+CREATE OR REPLACE FUNCTION list_cars_by_category_dynamic(p_car_category IN VARCHAR2)
+  RETURN ty_car_l IS
+
+  v_sql  VARCHAR2(4000);
+  v_cars ty_car_l;
+
+BEGIN
+  v_sql := 'select ty_car(vw.category, vw.manufacturer, vw.model, vw.mileage, vw.daily_fee)' ||
+           ' from vw_available_cars vw' || ' where 1 = 1';
+
+  IF p_car_category IS NOT NULL
+  THEN
+    v_sql := v_sql || ' AND UPPER(vw.category) = UPPER(:1)';
+  END IF;
+
+
+  EXECUTE IMMEDIATE v_sql BULK COLLECT
+    INTO v_cars
+    USING p_car_category;
+
+  RETURN v_cars;
+
+EXCEPTION
+  WHEN OTHERS THEN
+    dbms_output.put_line('Error occured: ' || SQLERRM);
+    RAISE;
+  
+END list_cars_by_category_dynamic;
