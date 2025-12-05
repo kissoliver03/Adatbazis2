@@ -1,7 +1,6 @@
-
-  --Car search by category for customers (category, car manufacturer, car_model, milegage, (status = AVAILABLE),  daily fee)
-  CREATE OR REPLACE view vw_available_cars AS
-    SELECT cat.category_name  AS category
+--Car search by category for customers (category, car manufacturer, car_model, milegage, (status = AVAILABLE),  daily fee)
+CREATE OR REPLACE view vw_available_cars AS
+  SELECT cat.category_name    AS category
           ,c.car_manufacturer AS manufacturer
           ,c.car_model        AS model
           ,c.mileage          AS mileage
