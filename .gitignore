@@ -1,5 +1,5 @@
 # Ignore SQL script backups and temporary files
-*.sql~
+*.~sql
 *.tmp
 *.temp
 
