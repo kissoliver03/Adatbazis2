@@ -43,6 +43,14 @@ service_description varchar2(4000),
 service_fee number
 );
 
+create table error_log(
+err_id      number constraint error_log_pk primary key,
+err_time    timestamp default sysdate,
+err_message varchar2(4000),
+err_value   varchar2(4000),
+api         varchar2(100)
+);
+
 
 --Loading categories
 INSERT INTO categories

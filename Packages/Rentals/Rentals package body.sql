@@ -27,11 +27,20 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
   
   EXCEPTION
     WHEN no_data_found THEN
+      pkg_error_log.error_log(p_error_message => 'No data found in this category!',
+                              p_error_value   => p_car_category,
+                              p_api           => 'list_cars_by_category');
+    
       dbms_output.put_line('No data found in this category: ' ||
                            p_car_category);
+    
       RAISE;
     
     WHEN OTHERS THEN
+      pkg_error_log.error_log(p_error_message => 'Error occured!',
+                              p_error_value   => p_car_category,
+                              p_api           => 'list_cars_by_category');
+    
       dbms_output.put_line('Error occured!' || SQLERRM);
     
   END list_cars_by_category;
@@ -58,7 +67,11 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
   
   EXCEPTION
     WHEN OTHERS THEN
-      dbms_output.put_line('Error occured: ' || SQLERRM);
+      pkg_error_log.error_log(p_error_message => 'Error occured!',
+                              p_error_value   => '',
+                              p_api           => 'calculate_rental_fee');
+    
+      dbms_output.put_line('Error occured!' || SQLERRM);
     
   END calculate_rental_fee;
   ----------------------------------------------------------------------
@@ -100,20 +113,36 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
       IF to_date(p_from_date, 'dd-mm-yyyy') >
          to_date(p_to_date, 'dd-mm-yyyy')
       THEN
-        RAISE to_date_bigger_than_from_date;
+        RAISE pkg_exceptions.to_date_bigger_than_from_date;
       END IF;
     
     ELSE
-      RAISE car_not_available;
+      RAISE pkg_exceptions.car_not_available;
     
     END IF;
   
   EXCEPTION
-    WHEN car_not_available THEN
+    WHEN no_data_found THEN
+      pkg_error_log.error_log(p_error_message => 'The selected car ID is not valid!',
+                              p_error_value   => p_car_id,
+                              p_api           => 'new_rental');
+    
+      dbms_output.put_line('No car found with this ID: ' || p_car_id);
+      RAISE;
+    
+    WHEN pkg_exceptions.car_not_available THEN
+      pkg_error_log.error_log(p_error_message => 'The selected car is not available!',
+                              p_error_value   => p_car_id,
+                              p_api           => 'new_rental');
+    
       dbms_output.put_line('The selected car is not available! Current status: ' ||
                            v_car_status);
       RAISE;
-    WHEN to_date_bigger_than_from_date THEN
+    WHEN pkg_exceptions.to_date_bigger_than_from_date THEN
+      pkg_error_log.error_log(p_error_message => 'The end of rental cannot be earlier than its beginning!',
+                              p_error_value   => p_to_date,
+                              p_api           => 'new_rental');
+    
       dbms_output.put_line('The end of rental cannot be earlier than its beginning! ' ||
                            SQLERRM);
       RAISE;

@@ -1,5 +1,6 @@
 PL/SQL Developer Test script 3.0
-6
+7
+--date format must be: dd-mm-yyyy
 begin
   -- Call the procedure
   pkg_rentals.new_rental(p_car_id => :p_car_id,
@@ -9,14 +10,14 @@ end;
 3
 p_car_id
 1
-10000
+100000
 4
 p_from_date
 1
-24-12-2025
+10-12-2025
 5
 p_to_date
 1
-22-12-2025
+12-12-2025
 5
 0

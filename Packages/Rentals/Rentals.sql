@@ -8,7 +8,4 @@ CREATE OR REPLACE PACKAGE pkg_rentals IS
                       ,p_from_date IN VARCHAR2
                       ,p_to_date   IN VARCHAR2);
 
-  car_not_available             EXCEPTION;
-  to_date_bigger_than_from_date EXCEPTION;
-
 END pkg_rentals;

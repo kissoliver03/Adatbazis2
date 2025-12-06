@@ -22,3 +22,10 @@ grant create job to car_manager;
 grant create sequence to car_manager;
 grant create type to car_manager;
 
+grant execute on dbms_scheduler to car_manager;
+
+alter session set current_schema = car_manager;
+
+
+
+

@@ -6,6 +6,7 @@ begin
 end;
 1
 p_car_category
-0
+1
+SUV
 5
 0

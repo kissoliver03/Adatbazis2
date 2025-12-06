@@ -7,13 +7,12 @@ begin
   -- Call the function
   result := list_cars_by_category_dynamic(p_car_category => :p_car_category);
   
-  open :cur for 
+  open :cur for
   select * from table(result);
 end;
 2
 p_car_category
-1
-Premium
+0
 5
 cur
 1
