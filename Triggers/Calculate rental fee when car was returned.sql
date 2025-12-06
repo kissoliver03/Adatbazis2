@@ -21,7 +21,7 @@ BEGIN
       ON cat.category_id = c.category_id
     JOIN customers cus
       ON :new.customer_id = cus.customer_id
-   WHERE c.car_id = :new.car_id;
+   WHERE :new.car_id = c.car_id;
 
   v_days := TRUNC(:new.return_date) - TRUNC(:new.from_date);
 
