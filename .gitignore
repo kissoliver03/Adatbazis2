@@ -2,6 +2,7 @@
 *.~sql
 *.tmp
 *.temp
+*.~tst
 
 # Ignore Oracle Data Pump export/import files
 *.dmp
