@@ -8,6 +8,7 @@ DECLARE
 
   v_daily_fee           categories.daily_fee%TYPE;
   v_is_regular_customer customers.is_regular_customer%TYPE;
+  v_days                NUMBER;
 
 BEGIN
 
@@ -18,19 +19,19 @@ BEGIN
     FROM categories cat
     JOIN cars c
       ON cat.category_id = c.category_id
-    JOIN rentals r
-      ON c.car_id = r.car_id
     JOIN customers cus
-      ON r.customer_id = cus.customer_id
+      ON :new.customer_id = cus.customer_id
    WHERE c.car_id = :new.car_id;
 
-  :new.rental_fee := (:new.return_date - :new.from_date) * v_daily_fee *
-                     (CASE
+  v_days := TRUNC(:new.return_date) - TRUNC(:new.from_date);
+
+  :new.rental_fee := v_days * v_daily_fee * (CASE
                        WHEN v_is_regular_customer = 1 THEN
                         0.8
                        ELSE
                         1
                      END);
+  dbms_output.put_line(:new.rental_fee);
 
 EXCEPTION
   WHEN OTHERS THEN
