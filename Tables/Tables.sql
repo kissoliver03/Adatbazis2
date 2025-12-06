@@ -275,7 +275,7 @@ VALUES
   (seq_rentals.nextval
   ,10001
   ,10001
-  ,SYSDATE - 2
+  ,SYSDATE + 2
   ,SYSDATE + 5
   ,NULL
   );
