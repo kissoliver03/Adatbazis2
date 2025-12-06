@@ -40,19 +40,20 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
   BEGIN
     UPDATE rentals r
        SET r.rental_fee =
-           (SELECT (r.return_date - r.from_date) * cat.daily_fee * CASE
+           (SELECT (r_inner.return_date - r_inner.from_date) * cat.daily_fee * CASE
                      WHEN cus.is_regular_customer = 1 THEN
                       0.8
                      ELSE
                       1
                    END
-              FROM rentals r
+              FROM rentals r_inner
               JOIN cars c
-                ON r.car_id = c.car_id
+                ON r_inner.car_id = c.car_id
               JOIN categories cat
                 ON c.category_id = cat.category_id
               JOIN customers cus
-                ON r.customer_id = cus.customer_id)
+                ON r_inner.customer_id = cus.customer_id
+                where r_inner.rental_id = r.rental_id)
      WHERE r.return_date IS NOT NULL;
   
   EXCEPTION
