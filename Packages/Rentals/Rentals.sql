@@ -8,4 +8,6 @@ CREATE OR REPLACE PACKAGE pkg_rentals IS
                       ,p_from_date IN VARCHAR2
                       ,p_to_date   IN VARCHAR2);
 
+  PROCEDURE return_car(p_car_id IN NUMBER);
+
 END pkg_rentals;

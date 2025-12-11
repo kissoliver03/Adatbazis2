@@ -13,7 +13,11 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
   
     IF lv_car_list.count = 0
     THEN
-      RAISE no_data_found;
+      pkg_error_log.error_log(p_error_message => 'No data found in this category!',
+                              p_error_value   => p_car_category,
+                              p_api           => 'list_cars_by_category');
+                              
+      raise_application_error(-20030, 'No car was found in this category!');
     END IF;
   
     FOR i IN 1 .. lv_car_list.count
@@ -31,10 +35,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
                               p_error_value   => p_car_category,
                               p_api           => 'list_cars_by_category');
     
-      dbms_output.put_line('No data found in this category: ' ||
-                           p_car_category);
-    
-      RAISE;
+      raise_application_error(-20030, 'No car was found in this category!');
     
     WHEN OTHERS THEN
       pkg_error_log.error_log(p_error_message => 'Error occured!',
@@ -42,6 +43,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
                               p_api           => 'list_cars_by_category');
     
       dbms_output.put_line('Error occured!' || SQLERRM);
+      raise;
     
   END list_cars_by_category;
   ----------------------------------------------------------------------
@@ -72,6 +74,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
                               p_api           => 'calculate_rental_fee');
     
       dbms_output.put_line('Error occured!' || SQLERRM);
+      raise;
     
   END calculate_rental_fee;
   ----------------------------------------------------------------------
@@ -113,11 +116,19 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
       IF to_date(p_from_date, 'dd-mm-yyyy') >
          to_date(p_to_date, 'dd-mm-yyyy')
       THEN
-        RAISE pkg_exceptions.to_date_bigger_than_from_date;
+        pkg_error_log.error_log(p_error_message => 'The end of rental cannot be earlier than its beginning!',
+                              p_error_value   => p_to_date,
+                              p_api           => 'new_rental');
+                              
+        raise_application_error(-20010, 'From_date is bigger than to_date!');
       END IF;
     
     ELSE
-      RAISE pkg_exceptions.car_not_available;
+      pkg_error_log.error_log(p_error_message => 'The selected car is not available!',
+                              p_error_value   => p_car_id,
+                              p_api           => 'new_rental');
+                              
+      raise_application_error (-20000, 'The selected car is not available!');
     
     END IF;
   
@@ -127,28 +138,32 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
                               p_error_value   => p_car_id,
                               p_api           => 'new_rental');
     
-      dbms_output.put_line('No car found with this ID: ' || p_car_id);
-      RAISE;
-    
-    WHEN pkg_exceptions.car_not_available THEN
-      pkg_error_log.error_log(p_error_message => 'The selected car is not available!',
-                              p_error_value   => p_car_id,
-                              p_api           => 'new_rental');
-    
-      dbms_output.put_line('The selected car is not available! Current status: ' ||
-                           v_car_status);
-      RAISE;
-    WHEN pkg_exceptions.to_date_bigger_than_from_date THEN
-      pkg_error_log.error_log(p_error_message => 'The end of rental cannot be earlier than its beginning!',
-                              p_error_value   => p_to_date,
-                              p_api           => 'new_rental');
-    
-      dbms_output.put_line('The end of rental cannot be earlier than its beginning! ' ||
-                           SQLERRM);
-      RAISE;
+      raise_application_error(-20030, 'No car was found with this ID!');
     
   END new_rental;
   ----------------------------------------------------------------------
+  
+  PROCEDURE return_car(p_car_id IN NUMBER) IS
+  BEGIN
+  
+    UPDATE rentals
+       SET return_date = SYSDATE
+     WHERE rental_id = (SELECT r.rental_id
+                          FROM rentals r
+                          JOIN cars c
+                            ON r.car_id = c.car_id
+                         WHERE r.car_id = p_car_id
+                           AND r.return_date IS NULL
+                           AND c.status = 'RENTED');
+  
+    IF SQL%ROWCOUNT = 0
+    THEN
+      raise_application_error(-20020, 'No car is rented with this ID');
+    END IF;
+  
+    UPDATE cars SET status = 'AVAILABLE' WHERE car_id = p_car_id;
+  
+  END return_car;
 
 END pkg_rentals;
 /

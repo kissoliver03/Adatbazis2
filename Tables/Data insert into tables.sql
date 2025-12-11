@@ -63,7 +63,7 @@ VALUES
   ,'RAV4'
   ,'Toyota'
   ,45000
-  ,'RENTED');
+  ,'RESERVED');
 
 INSERT INTO cars
   (license_plate
@@ -108,7 +108,7 @@ VALUES
   ,'Mustang'
   ,'Ford'
   ,15000
-  ,'RESERVED');
+  ,'AVAILABLE');
 
 --Loading customers
 INSERT INTO customers

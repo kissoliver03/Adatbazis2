@@ -2,8 +2,7 @@
   CREATE OR REPLACE TRIGGER trg_calculate_rental_fee
   BEFORE UPDATE OF return_date ON rentals
   FOR EACH ROW
-  WHEN (new.return_date IS NOT NULL
-       AND old.return_date IS NULL)
+  WHEN (new.return_date IS NOT NULL)
 DECLARE
 
   v_daily_fee           categories.daily_fee%TYPE;
@@ -24,6 +23,15 @@ BEGIN
    WHERE :new.car_id = c.car_id;
 
   v_days := TRUNC(:new.return_date) - TRUNC(:new.from_date);
+  
+  if v_days = 0 then
+    v_days := 1;
+  end if;
+  
+  if v_days < 0 then
+    raise_application_error(-20010, 'From_date is bigger than to_date!');
+  end if;
+    
 
   :new.rental_fee := v_days * v_daily_fee * (CASE
                        WHEN v_is_regular_customer = 1 THEN
