@@ -1,36 +1,36 @@
-CREATE OR REPLACE TRIGGER trg_categories
-  BEFORE INSERT ON categories
+CREATE OR REPLACE TRIGGER trg_category
+  BEFORE INSERT ON category
   FOR EACH ROW
   WHEN (new.category_id IS NULL)
 BEGIN
-  :new.category_id := seq_categories.nextval;
+  :new.category_id := seq_category.nextval;
 END;
 /
 
-CREATE OR REPLACE TRIGGER trg_cars
-  BEFORE INSERT ON cars
+CREATE OR REPLACE TRIGGER trg_car
+  BEFORE INSERT ON car
   FOR EACH ROW
   WHEN (new.car_id IS NULL)
 BEGIN
-  :new.car_id := seq_cars.nextval;
+  :new.car_id := seq_car.nextval;
 END;
 /
 
-CREATE OR REPLACE TRIGGER trg_customers
-  BEFORE INSERT ON customers
+CREATE OR REPLACE TRIGGER trg_customer
+  BEFORE INSERT ON customer
   FOR EACH ROW
   WHEN (new.customer_id IS NULL)
 BEGIN
-  :new.customer_id := seq_customers.nextval;
+  :new.customer_id := seq_customer.nextval;
 END;
 /
 
-CREATE OR REPLACE TRIGGER trg_rentals
-  BEFORE INSERT ON rentals
+CREATE OR REPLACE TRIGGER trg_rental
+  BEFORE INSERT ON rental
   FOR EACH ROW
   WHEN (new.rental_id IS NULL)
 BEGIN
-  :new.rental_id := seq_rentals.nextval;
+  :new.rental_id := seq_rental.nextval;
 END;
 /
 

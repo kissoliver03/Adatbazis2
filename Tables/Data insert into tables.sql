@@ -1,33 +1,33 @@
 --Loading categories
-INSERT INTO categories
+INSERT INTO category
   (category_name
   ,daily_fee)
 VALUES
   ('Premium'
   ,10000);
 
-INSERT INTO categories
+INSERT INTO category
   (category_name
   ,daily_fee)
 VALUES
   ('SUV'
   ,8000);
 
-INSERT INTO categories
+INSERT INTO category
   (category_name
   ,daily_fee)
 VALUES
   ('Van'
   ,15000);
 
-INSERT INTO categories
+INSERT INTO category
   (category_name
   ,daily_fee)
 VALUES
   ('Sedan'
   ,5000);
 
-INSERT INTO categories
+INSERT INTO category
   (category_name
   ,daily_fee)
 VALUES
@@ -35,7 +35,7 @@ VALUES
   ,12000);
 
 --Loading cars
-INSERT INTO cars
+INSERT INTO car
   (license_plate
   ,category_id
   ,car_model
@@ -50,7 +50,7 @@ VALUES
   ,120000
   ,'AVAILABLE');
 
-INSERT INTO cars
+INSERT INTO car
   (license_plate
   ,category_id
   ,car_model
@@ -65,7 +65,7 @@ VALUES
   ,45000
   ,'RESERVED');
 
-INSERT INTO cars
+INSERT INTO car
   (license_plate
   ,category_id
   ,car_model
@@ -80,7 +80,7 @@ VALUES
   ,210000
   ,'AVAILABLE');
 
-INSERT INTO cars
+INSERT INTO car
   (license_plate
   ,category_id
   ,car_model
@@ -95,7 +95,7 @@ VALUES
   ,89000
   ,'MAINTENANCE');
 
-INSERT INTO cars
+INSERT INTO car
   (license_plate
   ,category_id
   ,car_model
@@ -111,7 +111,7 @@ VALUES
   ,'AVAILABLE');
 
 --Loading customers
-INSERT INTO customers
+INSERT INTO customer
   (first_name
   ,last_name
   ,e_mail
@@ -122,7 +122,7 @@ VALUES
   ,'nagyanna@gmail.com'
   ,1);
 
-INSERT INTO customers
+INSERT INTO customer
   (first_name
   ,last_name
   ,e_mail
@@ -133,7 +133,7 @@ VALUES
   ,'kisspeter@gmail.com'
   ,0);
 
-INSERT INTO customers
+INSERT INTO customer
   (first_name
   ,last_name
   ,e_mail
@@ -144,7 +144,7 @@ VALUES
   ,'kovacseva@gmail.com'
   ,0);
 
-INSERT INTO customers
+INSERT INTO customer
   (first_name
   ,last_name
   ,e_mail
@@ -155,7 +155,7 @@ VALUES
   ,'horvathtamas@gmail.com'
   ,1);
 
-INSERT INTO customers
+INSERT INTO customer
   (first_name
   ,last_name
   ,e_mail
@@ -167,7 +167,7 @@ VALUES
   ,0);
 
 --Loading rentals
-INSERT INTO rentals
+INSERT INTO rental
   (car_id
   ,customer_id
   ,from_date
@@ -178,9 +178,10 @@ VALUES
   ,10000
   ,to_date('01-10-2023', 'dd-mm-yyyy')
   ,to_date('05-10-2023', 'dd-mm-yyyy')
-  ,to_date('05,10,2023', 'dd-mm-yyyy'));
+  ,to_date('05,10,2023', 'dd-mm-yyyy')
+  ,32000);
 
-INSERT INTO rentals
+INSERT INTO rental
   (car_id
   ,customer_id
   ,from_date
@@ -193,7 +194,7 @@ VALUES
   ,SYSDATE + 5
   ,NULL);
 
-INSERT INTO rentals
+INSERT INTO rental
   (car_id
   ,customer_id
   ,from_date
@@ -204,9 +205,10 @@ VALUES
   ,10002
   ,to_date('01-06-2023', 'dd-mm-yyyy')
   ,to_date('06-10-2023', 'dd-mm-yyyy')
-  ,to_date('06-10-2023', 'dd-mm-yyyy'));
+  ,to_date('06-10-2023', 'dd-mm-yyyy')
+  ,1905000);
 
-INSERT INTO rentals
+INSERT INTO rental
   (car_id
   ,customer_id
   ,from_date
@@ -217,9 +219,10 @@ VALUES
   ,10003
   ,to_date('11-10-2023', 'dd-mm-yyyy')
   ,to_date('12-10-2023', 'dd-mm-yyyy')
-  ,to_date('12-10-2023', 'dd-mm-yyyy'));
+  ,to_date('12-10-2023', 'dd-mm-yyyy')
+  ,4000);
 
-INSERT INTO rentals
+INSERT INTO rental
   (car_id
   ,customer_id
   ,from_date
@@ -230,7 +233,8 @@ VALUES
   ,10004
   ,to_date('01-09-2023', 'dd-mm-yyyy')
   ,to_date('05-09-2023', 'dd-mm-yyyy')
-  ,to_date('05-09-2023', 'dd-mm-yyyy'));
+  ,to_date('05-09-2023', 'dd-mm-yyyy')
+  ,48000);
 
 --Loading service log
 INSERT INTO service_log

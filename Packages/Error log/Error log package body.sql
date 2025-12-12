@@ -3,6 +3,7 @@ CREATE OR REPLACE PACKAGE BODY pkg_error_log IS
   PROCEDURE error_log(p_error_message VARCHAR2
                      ,p_error_value   VARCHAR2
                      ,p_api           VARCHAR2) IS
+    PRAGMA AUTONOMOUS_TRANSACTION;
   
   BEGIN
     INSERT INTO error_log
@@ -17,8 +18,8 @@ CREATE OR REPLACE PACKAGE BODY pkg_error_log IS
       ,p_error_message
       ,p_error_value
       ,p_api);
-      
-  commit;
+  
+    COMMIT;
   END error_log;
 
 END pkg_error_log;

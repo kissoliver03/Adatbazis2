@@ -1,156 +1,143 @@
 CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
 
-  PROCEDURE list_cars_by_category(p_car_category IN VARCHAR2) IS
-    TYPE ty_car_list_type IS TABLE OF vw_available_cars%ROWTYPE;
-    lv_car_list ty_car_list_type;
+  FUNCTION list_cars_by_category(p_car_category IN VARCHAR2)
+    RETURN ty_car_l IS
+  
+    v_sql  VARCHAR2(4000);
+    v_cars ty_car_l;
   
   BEGIN
-    SELECT *
-      BULK COLLECT
-      INTO lv_car_list
-      FROM vw_available_cars vw
-     WHERE upper(vw.category) = upper(p_car_category);
   
-    IF lv_car_list.count = 0
+    v_sql := 'select ty_car(vw.category, vw.manufacturer, vw.model, vw.mileage, vw.daily_fee)' ||
+             ' from vw_available_cars vw' || ' where 1 = 1';
+  
+    IF p_car_category IS NOT NULL
     THEN
-      pkg_error_log.error_log(p_error_message => 'No data found in this category!',
-                              p_error_value   => p_car_category,
-                              p_api           => 'list_cars_by_category');
-                              
-      raise_application_error(-20030, 'No car was found in this category!');
+      v_sql := v_sql || ' AND UPPER(vw.category) = UPPER(:1)';
     END IF;
   
-    FOR i IN 1 .. lv_car_list.count
-    LOOP
-      dbms_output.put_line('Manufacturer: ' || lv_car_list(i).manufacturer ||
-                           ', Model: ' || lv_car_list(i).model ||
-                           ', Mileage: ' || lv_car_list(i).mileage ||
-                           ', Daily fee: ' || lv_car_list(i).daily_fee);
-    
-    END LOOP;
+    EXECUTE IMMEDIATE v_sql BULK COLLECT
+      INTO v_cars
+      USING p_car_category;
+  
+    RETURN v_cars;
   
   EXCEPTION
     WHEN no_data_found THEN
-      pkg_error_log.error_log(p_error_message => 'No data found in this category!',
+      pkg_error_log.error_log(p_error_message => 'No data was found in this category!',
                               p_error_value   => p_car_category,
-                              p_api           => 'list_cars_by_category');
+                              p_api           => 'list_cars_by_category_dynamic');
     
-      raise_application_error(-20030, 'No car was found in this category!');
+      RAISE;
     
     WHEN OTHERS THEN
-      pkg_error_log.error_log(p_error_message => 'Error occured!',
-                              p_error_value   => p_car_category,
-                              p_api           => 'list_cars_by_category');
-    
-      dbms_output.put_line('Error occured!' || SQLERRM);
-      raise;
+      pkg_error_log.error_log(p_error_message => SQLERRM,
+                              p_error_value   => v_sql,
+                              p_api           => 'list_cars_by_category_dynamic');
+      RAISE;
     
   END list_cars_by_category;
   ----------------------------------------------------------------------
-  PROCEDURE calculate_rental_fee IS
-  BEGIN
-    UPDATE rentals r
-       SET r.rental_fee =
-           (SELECT (r_inner.return_date - r_inner.from_date) * cat.daily_fee * CASE
-                     WHEN cus.is_regular_customer = 1 THEN
-                      0.8
-                     ELSE
-                      1
-                   END
-              FROM rentals r_inner
-              JOIN cars c
-                ON r_inner.car_id = c.car_id
-              JOIN categories cat
-                ON c.category_id = cat.category_id
-              JOIN customers cus
-                ON r_inner.customer_id = cus.customer_id
-             WHERE r_inner.rental_id = r.rental_id)
-     WHERE r.return_date IS NOT NULL;
+  PROCEDURE new_rental(p_car_id      IN NUMBER
+                      ,p_customer_id IN NUMBER
+                      ,p_from_date   IN VARCHAR2
+                      ,p_to_date     IN VARCHAR2) IS
   
-  EXCEPTION
-    WHEN OTHERS THEN
-      pkg_error_log.error_log(p_error_message => 'Error occured!',
-                              p_error_value   => '',
-                              p_api           => 'calculate_rental_fee');
-    
-      dbms_output.put_line('Error occured!' || SQLERRM);
-      raise;
-    
-  END calculate_rental_fee;
-  ----------------------------------------------------------------------
-  PROCEDURE new_rental(p_car_id    IN NUMBER
-                      ,p_from_date IN VARCHAR2
-                      ,p_to_date   IN VARCHAR2) IS
-  
-    v_car_status cars.status%TYPE;
+    v_car_status  car.status%TYPE;
+    v_customer_id customer.customer_id%TYPE;
   
   BEGIN
   
-    SELECT c.status
-      INTO v_car_status
-      FROM cars c
-     WHERE c.car_id = p_car_id;
+    BEGIN
+      SELECT c.status
+        INTO v_car_status
+        FROM car c
+       WHERE c.car_id = p_car_id;
+    EXCEPTION
+      WHEN no_data_found THEN
+        RAISE pkg_exceptions.no_car_found;
+    END;
+  
+    BEGIN
+      SELECT cus.customer_id
+        INTO v_customer_id
+        FROM customer cus
+       WHERE cus.customer_id = p_customer_id;
+    EXCEPTION
+      WHEN no_data_found THEN
+        RAISE pkg_exceptions.customer_not_valid;
+    END;
   
     IF v_car_status = 'AVAILABLE'
     THEN
-      INSERT INTO rentals
-        (rental_id
-        ,car_id
+      INSERT INTO rental
+        (car_id
         ,customer_id
         ,from_date
         ,to_date)
       VALUES
-        (seq_rentals.nextval
-        ,p_car_id
-        ,10002 --Fix dummy data
+        (p_car_id
+        ,p_customer_id
         ,to_date(p_from_date, 'dd-mm-yyyy')
         ,to_date(p_to_date, 'dd-mm-yyyy'));
     
       IF SYSDATE < to_date(p_from_date, 'dd-mm-yyyy')
       THEN
-        UPDATE cars SET status = 'RESERVED' WHERE car_id = p_car_id;
+        UPDATE car SET status = 'RESERVED' WHERE car_id = p_car_id;
       ELSE
-        UPDATE cars SET status = 'RENTED' WHERE car_id = p_car_id;
+        UPDATE car SET status = 'RENTED' WHERE car_id = p_car_id;
       END IF;
     
       IF to_date(p_from_date, 'dd-mm-yyyy') >
          to_date(p_to_date, 'dd-mm-yyyy')
       THEN
-        pkg_error_log.error_log(p_error_message => 'The end of rental cannot be earlier than its beginning!',
-                              p_error_value   => p_to_date,
-                              p_api           => 'new_rental');
-                              
-        raise_application_error(-20010, 'From_date is bigger than to_date!');
+        RAISE pkg_exceptions.to_date_bigger_than_from_date;
       END IF;
     
     ELSE
-      pkg_error_log.error_log(p_error_message => 'The selected car is not available!',
-                              p_error_value   => p_car_id,
-                              p_api           => 'new_rental');
-                              
-      raise_application_error (-20000, 'The selected car is not available!');
-    
+      RAISE pkg_exceptions.car_not_available;
     END IF;
   
   EXCEPTION
-    WHEN no_data_found THEN
+    WHEN pkg_exceptions.no_car_found THEN
       pkg_error_log.error_log(p_error_message => 'The selected car ID is not valid!',
                               p_error_value   => p_car_id,
                               p_api           => 'new_rental');
     
       raise_application_error(-20030, 'No car was found with this ID!');
     
+    WHEN pkg_exceptions.to_date_bigger_than_from_date THEN
+      pkg_error_log.error_log(p_error_message => 'The end of rental cannot be earlier than its beginning!',
+                              p_error_value   => p_to_date,
+                              p_api           => 'new_rental');
+    
+      raise_application_error(-20010, 'From_date is bigger than to_date!');
+    
+    WHEN pkg_exceptions.car_not_available THEN
+      pkg_error_log.error_log(p_error_message => 'The selected car is not available!',
+                              p_error_value   => p_car_id,
+                              p_api           => 'new_rental');
+    
+      raise_application_error(-20000, 'The selected car is not available!');
+    
+    WHEN pkg_exceptions.customer_not_valid THEN
+      pkg_error_log.error_log(p_error_message => 'The given customer is not valid!',
+                              p_error_value   => p_customer_id,
+                              p_api           => 'new_rental');
+    
+      raise_application_error(-20040, 'The given customer is not valid!');
+    
   END new_rental;
   ----------------------------------------------------------------------
-  
+
   PROCEDURE return_car(p_car_id IN NUMBER) IS
   BEGIN
   
-    UPDATE rentals
+    UPDATE rental
        SET return_date = SYSDATE
      WHERE rental_id = (SELECT r.rental_id
-                          FROM rentals r
-                          JOIN cars c
+                          FROM rental r
+                          JOIN car c
                             ON r.car_id = c.car_id
                          WHERE r.car_id = p_car_id
                            AND r.return_date IS NULL
@@ -158,11 +145,19 @@ CREATE OR REPLACE PACKAGE BODY pkg_rentals IS
   
     IF SQL%ROWCOUNT = 0
     THEN
-      raise_application_error(-20020, 'No car is rented with this ID');
+      pkg_error_log.error_log(p_error_message => 'No car is rented with the given ID!',
+                              p_error_value   => p_car_id,
+                              p_api           => 'return_car');
+    
+      RAISE pkg_exceptions.no_car_is_rented_with_id;
     END IF;
   
-    UPDATE cars SET status = 'AVAILABLE' WHERE car_id = p_car_id;
+    UPDATE car SET status = 'AVAILABLE' WHERE car_id = p_car_id;
   
+  EXCEPTION
+    WHEN pkg_exceptions.no_car_is_rented_with_id THEN
+      raise_application_error(-20020, 'No car is rented with this ID');
+    
   END return_car;
 
 END pkg_rentals;

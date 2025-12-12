@@ -6,8 +6,8 @@ CREATE OR REPLACE view vw_available_cars AS
         ,c.car_model        AS model
         ,c.mileage          AS mileage
         ,cat.daily_fee      AS daily_fee
-    FROM cars c
-    JOIN categories cat
+    FROM car c
+    JOIN category cat
       ON c.category_id = cat.category_id
    WHERE c.status = 'AVAILABLE';
 

@@ -12,4 +12,7 @@ CREATE OR REPLACE PACKAGE pkg_exceptions IS
   no_car_found EXCEPTION;
   PRAGMA EXCEPTION_INIT(no_car_found, -20030);
 
+  customer_not_valid EXCEPTION;
+  PRAGMA EXCEPTION_INIT(customer_not_valid, -20040);
+
 END pkg_exceptions;
