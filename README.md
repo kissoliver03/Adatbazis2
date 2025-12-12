@@ -47,8 +47,16 @@ Az adatbázis felépítéséhez az alábbi sorrendben szükséges lefuttatni a f
     * `Packages/Rentals/Rentals package body.sql`
 
 7.  **Tesztek**
-    * `Tests/*.sql`
-        *(A működés ellenőrzése.)*
+    * `Tests/Add new rental.tst`
+        *(Új autóbérlés autó ID, bérlés kezdeti ideje és bérlés vég ideje megadása alapján.)*
+    * `Tests/Calculate rental fees.tst`
+        *(Autóbérlés befejezése után automatikus végösszeg számítása és beszúrása a táblázatba.)*
+    * `Tests/List cars by category (with dynamic querry).tst`
+        *(Elérhető státuszú autók listázása dinamikus querry használatával autó kategória megadása alapján.)*
+    * `Tests/List cars by category (with list).tst`
+        *(Elérhető státuszú autók listázása lista segítségével dbms_outputra autó kategória megadása alapján.)*
+    * `Tests/Return car.tst`
+        *(Autóbérlés befejezése autó ID megadása alapján.)*
 
 ---
 
