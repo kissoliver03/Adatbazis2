@@ -291,3 +291,15 @@ VALUES
   ,to_date('01-01-2019', 'dd-mm-yyyy')
   ,'Motor meghibasodas'
   ,30000);
+  
+--Loading reserve
+INSERT INTO reserve
+  (customer_id
+  ,car_id
+  ,from_date
+  ,to_date)
+VALUES
+  (10003
+  ,10001
+  ,SYSDATE + 2
+  ,SYSDATE + 5);

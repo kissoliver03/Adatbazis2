@@ -128,6 +128,32 @@ BEGIN
 END;
 /
 
+CREATE OR REPLACE TRIGGER trg_reserve
+  BEFORE INSERT OR UPDATE ON reserve
+  FOR EACH ROW
+BEGIN
+  IF (inserting)
+  THEN
+    IF (:new.reserve_id IS NULL)
+    THEN
+      :new.reserve_id := seq_reserve.nextval;
+    END IF;
+    :new.created_on := SYSDATE;
+    :new.last_mod   := SYSDATE;
+    :new.dml_flag   := 'I';
+    :new.version    := 1;
+    :new.mod_user   := sys_context(namespace => 'USERENV',
+                                   attribute => 'OS_USER');
+  ELSE
+    :new.last_mod := SYSDATE;
+    :new.dml_flag := 'U';
+    :new.version  := :old.version + 1;
+    :new.mod_user := sys_context(namespace => 'USERENV',
+                                 attribute => 'OS_USER');
+  END IF;
+END;
+/
+
 CREATE OR REPLACE TRIGGER trg_error_log
   BEFORE INSERT ON error_log
   FOR EACH ROW

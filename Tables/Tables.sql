@@ -27,7 +27,7 @@ rental_id number constraint rentals_pk primary key,
 car_id number constraint rentals_car_id_fk references car(car_id) not null,
 customer_id number constraint customer_id_fk references customer(customer_id) not null,
 from_date DATE default sysdate NOT NULL,
-to_date DATE,
+to_date DATE not null,
 return_date DATE,
 rental_fee number
 );
@@ -46,6 +46,14 @@ err_time    timestamp default sysdate,
 err_message varchar2(4000),
 err_value   varchar2(4000),
 api         varchar2(100)
+);
+
+create table reserve(
+reserve_id number constraint reserve_pk primary key,
+customer_id number constraint reserve_customer_id_fk references customer(customer_id) not null,
+car_id number constraint reserve_car_id_fk references car(car_id) not null,
+from_date DATE default sysdate NOT NULL,
+to_date DATE not null
 );
 
 alter table category add mod_user varchar2(300);
@@ -77,3 +85,9 @@ alter table service_log add created_on timestamp;
 alter table service_log add last_mod timestamp;
 alter table service_log add DML_FLAG varchar2(1); -- I,U,D
 alter table service_log add version number;
+
+alter table reserve add mod_user varchar2(300);
+alter table reserve add created_on timestamp;
+alter table reserve add last_mod timestamp;
+alter table reserve add DML_FLAG varchar2(1); -- I,U,D
+alter table reserve add version number;
