@@ -47,3 +47,33 @@ err_message varchar2(4000),
 err_value   varchar2(4000),
 api         varchar2(100)
 );
+
+alter table category add mod_user varchar2(300);
+alter table category add created_on timestamp;
+alter table category add last_mod timestamp;
+alter table category add DML_FLAG varchar2(1); -- I,U,D
+alter table category add version number;
+
+alter table car add mod_user varchar2(300);
+alter table car add created_on timestamp;
+alter table car add last_mod timestamp;
+alter table car add DML_FLAG varchar2(1); -- I,U,D
+alter table car add version number;
+
+alter table customer add mod_user varchar2(300);
+alter table customer add created_on timestamp;
+alter table customer add last_mod timestamp;
+alter table customer add DML_FLAG varchar2(1); -- I,U,D
+alter table customer add version number;
+
+alter table rental add mod_user varchar2(300);
+alter table rental add created_on timestamp;
+alter table rental add last_mod timestamp;
+alter table rental add DML_FLAG varchar2(1); -- I,U,D
+alter table rental add version number;
+
+alter table service_log add mod_user varchar2(300);
+alter table service_log add created_on timestamp;
+alter table service_log add last_mod timestamp;
+alter table service_log add DML_FLAG varchar2(1); -- I,U,D
+alter table service_log add version number;

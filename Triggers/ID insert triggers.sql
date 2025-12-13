@@ -1,45 +1,130 @@
 CREATE OR REPLACE TRIGGER trg_category
-  BEFORE INSERT ON category
+  BEFORE INSERT OR UPDATE ON category
   FOR EACH ROW
-  WHEN (new.category_id IS NULL)
 BEGIN
-  :new.category_id := seq_category.nextval;
+  IF (inserting)
+  THEN
+    IF (:new.category_id IS NULL)
+    THEN
+      :new.category_id := seq_category.nextval;
+    END IF;
+    :new.created_on := SYSDATE;
+    :new.last_mod   := SYSDATE;
+    :new.dml_flag   := 'I';
+    :new.version    := 1;
+    :new.mod_user   := sys_context(namespace => 'USERENV',
+                                   attribute => 'OS_USER');
+  ELSE
+    :new.last_mod := SYSDATE;
+    :new.dml_flag := 'U';
+    :new.version  := :old.version + 1;
+    :new.mod_user := sys_context(namespace => 'USERENV',
+                                 attribute => 'OS_USER');
+  END IF;
 END;
 /
 
 CREATE OR REPLACE TRIGGER trg_car
-  BEFORE INSERT ON car
+  BEFORE INSERT OR UPDATE ON car
   FOR EACH ROW
-  WHEN (new.car_id IS NULL)
 BEGIN
-  :new.car_id := seq_car.nextval;
+  IF (inserting)
+  THEN
+    IF (:new.car_id IS NULL)
+    THEN
+      :new.car_id := seq_car.nextval;
+    END IF;
+    :new.created_on := SYSDATE;
+    :new.last_mod   := SYSDATE;
+    :new.dml_flag   := 'I';
+    :new.version    := 1;
+    :new.mod_user   := sys_context(namespace => 'USERENV',
+                                   attribute => 'OS_USER');
+  ELSE
+    :new.last_mod := SYSDATE;
+    :new.dml_flag := 'U';
+    :new.version  := :old.version + 1;
+    :new.mod_user := sys_context(namespace => 'USERENV',
+                                 attribute => 'OS_USER');
+  END IF;
 END;
 /
 
 CREATE OR REPLACE TRIGGER trg_customer
-  BEFORE INSERT ON customer
+  BEFORE INSERT OR UPDATE ON customer
   FOR EACH ROW
-  WHEN (new.customer_id IS NULL)
 BEGIN
-  :new.customer_id := seq_customer.nextval;
+  IF (inserting)
+  THEN
+    IF (:new.customer_id IS NULL)
+    THEN
+      :new.customer_id := seq_customer.nextval;
+    END IF;
+    :new.created_on := SYSDATE;
+    :new.last_mod   := SYSDATE;
+    :new.dml_flag   := 'I';
+    :new.version    := 1;
+    :new.mod_user   := sys_context(namespace => 'USERENV',
+                                   attribute => 'OS_USER');
+  ELSE
+    :new.last_mod := SYSDATE;
+    :new.dml_flag := 'U';
+    :new.version  := :old.version + 1;
+    :new.mod_user := sys_context(namespace => 'USERENV',
+                                 attribute => 'OS_USER');
+  END IF;
 END;
 /
 
 CREATE OR REPLACE TRIGGER trg_rental
-  BEFORE INSERT ON rental
+  BEFORE INSERT OR UPDATE ON rental
   FOR EACH ROW
-  WHEN (new.rental_id IS NULL)
 BEGIN
-  :new.rental_id := seq_rental.nextval;
+  IF (inserting)
+  THEN
+    IF (:new.rental_id IS NULL)
+    THEN
+      :new.rental_id := seq_rental.nextval;
+    END IF;
+    :new.created_on := SYSDATE;
+    :new.last_mod   := SYSDATE;
+    :new.dml_flag   := 'I';
+    :new.version    := 1;
+    :new.mod_user   := sys_context(namespace => 'USERENV',
+                                   attribute => 'OS_USER');
+  ELSE
+    :new.last_mod := SYSDATE;
+    :new.dml_flag := 'U';
+    :new.version  := :old.version + 1;
+    :new.mod_user := sys_context(namespace => 'USERENV',
+                                 attribute => 'OS_USER');
+  END IF;
 END;
 /
 
 CREATE OR REPLACE TRIGGER trg_service_log
-  BEFORE INSERT ON service_log
+  BEFORE INSERT OR UPDATE ON service_log
   FOR EACH ROW
-  WHEN (new.service_id IS NULL)
 BEGIN
-  :new.service_id := seq_service_log.nextval;
+  IF (inserting)
+  THEN
+    IF (:new.service_id IS NULL)
+    THEN
+      :new.service_id := seq_service_log.nextval;
+    END IF;
+    :new.created_on := SYSDATE;
+    :new.last_mod   := SYSDATE;
+    :new.dml_flag   := 'I';
+    :new.version    := 1;
+    :new.mod_user   := sys_context(namespace => 'USERENV',
+                                   attribute => 'OS_USER');
+  ELSE
+    :new.last_mod := SYSDATE;
+    :new.dml_flag := 'U';
+    :new.version  := :old.version + 1;
+    :new.mod_user := sys_context(namespace => 'USERENV',
+                                 attribute => 'OS_USER');
+  END IF;
 END;
 /
 
