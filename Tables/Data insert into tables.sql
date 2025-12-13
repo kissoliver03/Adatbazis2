@@ -239,56 +239,66 @@ VALUES
 --Loading service log
 INSERT INTO service_log
   (car_id
-  ,service_date
+  ,from_date
+  ,to_date
   ,service_description
   ,service_fee)
 VALUES
   (10000
   ,to_date('01-01-2023', 'dd-mm-yyyy')
+  ,to_date('07-01-2023', 'dd-mm-yyyy')
   ,'Olajcsere'
   ,15000);
 
 INSERT INTO service_log
   (car_id
-  ,service_date
+  ,from_date
+  ,to_date
   ,service_description
   ,service_fee)
 VALUES
   (10001
   ,to_date('01-04-2021', 'dd-mm-yyyy')
+  ,to_date('05-04-2021', 'dd-mm-yyyy')
   ,'Olajcsere'
   ,12000);
 
 INSERT INTO service_log
   (car_id
-  ,service_date
+  ,from_date
+  ,to_date
   ,service_description
   ,service_fee)
 VALUES
   (10002
   ,to_date('01-07-2023', 'dd-mm-yyyy')
+  ,to_date('02-07-2023', 'dd-mm-yyyy')
   ,'Kerekcsere'
   ,20000);
 
 INSERT INTO service_log
   (car_id
-  ,service_date
+  ,from_date
+  ,to_date
   ,service_description
   ,service_fee)
 VALUES
   (10003
   ,to_date('01-01-2020', 'dd-mm-yyyy')
+  ,to_date('03-01-2020', 'dd-mm-yyyy')
   ,'Kerekcsere'
   ,10000);
 
 INSERT INTO service_log
   (car_id
-  ,service_date
+  ,from_date
+  ,to_date
   ,service_description
   ,service_fee)
 VALUES
   (10004
   ,to_date('01-01-2019', 'dd-mm-yyyy')
+  ,to_date('01-02-2019', 'dd-mm-yyyy')
   ,'Motor meghibasodas'
   ,30000);
   

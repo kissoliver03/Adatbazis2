@@ -35,7 +35,8 @@ rental_fee number
 create table service_log(
 service_id number constraint service_log_pk primary key,
 car_id number constraint service_log_car_id_fk references car(car_id) NOT NULL,
-service_date DATE default sysdate,
+from_date DATE default sysdate not null,
+to_date date not null,
 service_description varchar2(4000),
 service_fee number
 );
