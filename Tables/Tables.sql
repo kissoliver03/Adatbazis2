@@ -92,3 +92,85 @@ alter table reserve add created_on timestamp;
 alter table reserve add last_mod timestamp;
 alter table reserve add DML_FLAG varchar2(1); -- I,U,D
 alter table reserve add version number;
+
+--history tables
+create table category_h(
+category_id number,
+category_name varchar2(100),
+daily_fee number,
+mod_user varchar2(300),
+created_on timestamp(6),
+last_mod timestamp(6),
+dml_flag varchar2(1),
+version number
+);
+
+create table car_h(
+car_id number,
+license_plate varchar2(40),
+category_id number,
+car_model varchar2(100),
+car_manufacturer varchar2(100),
+mileage number,
+status varchar2(40),
+mod_user varchar2(300),
+created_on timestamp(6),
+last_mod timestamp(6),
+dml_flag varchar2(1),
+version number
+);
+
+create table customer_h(
+customer_id number,
+first_name varchar2(100),
+last_name varchar2(100),
+e_mail varchar2(100),
+is_regular_customer number,
+mod_user varchar2(300),
+created_on timestamp(6),
+last_mod timestamp(6),
+dml_flag varchar2(1),
+version number
+);
+
+create table rental_h(
+rental_id number,
+car_id number,
+customer_id number,
+from_date DATE,
+to_date DATE,
+return_date DATE,
+rental_fee number,
+mod_user varchar2(300),
+created_on timestamp(6),
+last_mod timestamp(6),
+dml_flag varchar2(1),
+version number
+);
+
+create table service_log_h(
+service_id number,
+car_id number,
+from_date DATE,
+to_date date,
+service_description varchar2(4000),
+service_fee number,
+mod_user varchar2(300),
+created_on timestamp(6),
+last_mod timestamp(6),
+dml_flag varchar2(1),
+version number
+);
+
+create table reserve_h(
+reserve_id number,
+customer_id number,
+car_id number,
+from_date DATE,
+to_date DATE,
+mod_user varchar2(300),
+created_on timestamp(6),
+last_mod timestamp(6),
+dml_flag varchar2(1),
+version number
+);

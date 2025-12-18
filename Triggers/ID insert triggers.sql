@@ -162,3 +162,209 @@ BEGIN
   :new.err_id := seq_error_log.nextval;
 END;
 /
+
+--History table triggers
+
+CREATE OR REPLACE TRIGGER trg_category_h
+  AFTER INSERT OR UPDATE OR DELETE ON category
+  FOR EACH ROW
+BEGIN
+  IF (deleting)
+  THEN
+    INSERT INTO category_h
+      (category_id
+      ,category_name
+      ,daily_fee
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:old.category_id
+      ,:old.category_name
+      ,:old.daily_fee
+      ,sys_context('USERENV', 'OS_USER')
+      ,:old.created_on
+      ,SYSDATE
+      ,'D'
+      ,:old.version + 1);
+  ELSE
+    INSERT INTO category_h
+      (category_id
+      ,category_name
+      ,daily_fee
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:new.category_id
+      ,:new.category_name
+      ,:new.daily_fee
+      ,:new.mod_user
+      ,:new.created_on
+      ,:new.last_mod
+      ,:new.dml_flag
+      ,:new.version);
+  END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_car_h
+  AFTER INSERT OR UPDATE OR DELETE on car
+  FOR EACH ROW
+BEGIN
+  IF (deleting)
+  THEN
+    INSERT INTO car_h
+      (car_id
+      ,license_plate
+      ,category_id
+      ,car_model
+      ,car_manufacturer
+      ,mileage
+      ,status
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:old.car_id
+      ,:old.license_plate
+      ,:old.category_id
+      ,:old.car_model
+      ,:old.car_manufacturer
+      ,:old.mileage
+      ,:old.status
+      ,sys_context('USERENV', 'OS_USER')
+      ,:old.created_on
+      ,SYSDATE
+      ,'D'
+      ,:old.version + 1);
+  ELSE
+    INSERT INTO car_h
+      (car_id
+      ,license_plate
+      ,category_id
+      ,car_model
+      ,car_manufacturer
+      ,mileage
+      ,status
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:new.car_id
+      ,:new.license_plate
+      ,:new.category_id
+      ,:new.car_model
+      ,:new.car_manufacturer
+      ,:new.mileage
+      ,:new.status
+      ,:new.mod_user
+      ,:new.created_on
+      ,:new.last_mod
+      ,:new.dml_flag
+      ,:new.version);
+  END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_customer_h
+  AFTER INSERT OR UPDATE OR DELETE on customer
+  FOR EACH ROW
+BEGIN
+  IF (deleting)
+  THEN
+    INSERT INTO customer_h
+      (customer_id
+      ,first_name
+      ,last_name
+      ,e_mail
+      ,is_regular_customer
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:old.customer_id
+      ,:old.first_name
+      ,:old.last_name
+      ,:old.e_mail
+      ,:old.is_regular_customer
+      ,sys_context('USERENV', 'OS_USER')
+      ,:old.created_on
+      ,SYSDATE
+      ,'D'
+      ,:old.version + 1);
+  ELSE
+    INSERT INTO customer_h
+      (customer_id
+      ,first_name
+      ,last_name
+      ,e_mail
+      ,is_regular_customer
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:new.customer_id
+      ,:new.first_name
+      ,:new.last_name
+      ,:new.e_mail
+      ,:new.is_regular_customer
+      ,:new.mod_user
+      ,:new.created_on
+      ,:new.last_mod
+      ,:new.dml_flag
+      ,:new.version);
+  END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_rental_h
+  AFTER INSERT OR UPDATE OR DELETE ON rental
+  FOR EACH ROW
+BEGIN
+  IF (deleting)
+  THEN
+  
+  ELSE
+  
+  END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_service_log_h
+  AFTER INSERT OR UPDATE OR DELETE ON service_log
+  FOR EACH ROW
+BEGIN
+  IF (deleting)
+  THEN
+  
+  ELSE
+  
+  END IF;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_reserve_h
+  AFTER INSERT OR UPDATE OR DELETE ON reserve
+  FOR EACH ROW
+BEGIN
+  IF (deleting)
+  THEN
+  
+  ELSE
+  
+  END IF;
+END;
+/
