@@ -20,29 +20,31 @@ Az adatbázis felépítéséhez az alábbi sorrendben szükséges lefuttatni a f
     * `Tables/Tables.sql`
         *(Ez a fájl tartalmazza a CREATE TABLE utasításokat.)*
 
-3.  **Triggerek**
+3.  **Csomagok (Packages)**
+    * `Packages/Error log/Error_log.sql`
+    * `Packages/Error log/Error log package body.sql`
+
+4.  **Triggerek**
     * `Triggers/ID insert triggers.sql`
         *(ID feltöltés adat INSERT-nél.)*
     * `Triggers/Calculate rental fee when car was returned.sql`
         *(Automatikus bérlési költség kiszámítása és INSERT-álása a táblába.)*
 
-4.  **Táblák feltöltése adatokkal**
+5.  **Táblák feltöltése adatokkal**
     * `Tables/Data insert into tables.sql`
         *(Ez a fájl tartalmazza az INSERT utasításokat a táblák dummy adatokkal való feltöltéséhez.)*
 
-5.  **Nézetek (Views)**
+6.  **Nézetek (Views)**
     * `Views/List available cars.sql`
         *(Lekérdezéseket segítő nézet.)*
     * `Views/Customer statistics.sql`
         *(Vásárlói statisztika nézet.)*
 
-3.  **Objektumok és Típusok**
+7.  **Objektumok és Típusok**
     * `Objects/Car.sql`
 
-5.  **Csomagok (Packages)**
+8.  **Csomagok (Packages)**
     * `Packages/Exceptions/Exceptions.sql`
-    * `Packages/Error log/Error_log.sql`
-    * `Packages/Error log/Error log package body.sql`
 
     * `Packages/Rentals/Rentals.sql`
     * `Packages/Rentals/Rentals package body.sql`
@@ -50,7 +52,7 @@ Az adatbázis felépítéséhez az alábbi sorrendben szükséges lefuttatni a f
     * `Packages/Service/Service.sql`
     * `Packages/Service/Service package body.sql`
 
-7.  **Tesztek**
+9.  **Tesztek**
     * `Tests/Add new rental.tst`
         *(Új autóbérlés autó ID, bérlés kezdeti ideje és bérlés vég ideje megadása alapján.)*
     * `Tests/List cars by category.tst`

@@ -172,7 +172,8 @@ INSERT INTO rental
   ,customer_id
   ,from_date
   ,to_date
-  ,return_date)
+  ,return_date
+  ,rental_fee)
 VALUES
   (10000
   ,10000
@@ -199,7 +200,8 @@ INSERT INTO rental
   ,customer_id
   ,from_date
   ,to_date
-  ,return_date)
+  ,return_date
+  ,rental_fee)
 VALUES
   (10002
   ,10002
@@ -213,7 +215,8 @@ INSERT INTO rental
   ,customer_id
   ,from_date
   ,to_date
-  ,return_date)
+  ,return_date
+  ,rental_fee)
 VALUES
   (10003
   ,10003
@@ -227,7 +230,8 @@ INSERT INTO rental
   ,customer_id
   ,from_date
   ,to_date
-  ,return_date)
+  ,return_date
+  ,rental_fee)
 VALUES
   (10004
   ,10004
