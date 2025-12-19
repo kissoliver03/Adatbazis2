@@ -336,9 +336,59 @@ CREATE OR REPLACE TRIGGER trg_rental_h
 BEGIN
   IF (deleting)
   THEN
-  
+    INSERT INTO rental_h
+      (rental_id
+      ,car_id
+      ,customer_id
+      ,from_date
+      ,to_date
+      ,return_date
+      ,rental_fee
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:old.rental_id
+      ,:old.car_id
+      ,:old.customer_id
+      ,:old.from_date
+      ,:old.to_date
+      ,:old.return_date
+      ,:old.rental_fee
+      ,sys_context('USERENV', 'OS_USER')
+      ,:old.created_on
+      ,SYSDATE
+      ,'D'
+      ,:old.version + 1);
   ELSE
-  
+    INSERT INTO rental_h
+      (rental_id
+      ,car_id
+      ,customer_id
+      ,from_date
+      ,to_date
+      ,return_date
+      ,rental_fee
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:new.rental_id
+      ,:new.car_id
+      ,:new.customer_id
+      ,:new.from_date
+      ,:new.to_date
+      ,:new.return_date
+      ,:new.rental_fee
+      ,:new.mod_user
+      ,:new.created_on
+      ,:new.last_mod
+      ,:new.dml_flag
+      ,:new.version);
   END IF;
 END;
 /
@@ -349,9 +399,55 @@ CREATE OR REPLACE TRIGGER trg_service_log_h
 BEGIN
   IF (deleting)
   THEN
-  
+    INSERT INTO service_log_h
+      (service_id
+      ,car_id
+      ,from_date
+      ,to_date
+      ,service_description
+      ,service_fee
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:old.service_id
+      ,:old.car_id
+      ,:old.from_date
+      ,:old.to_date
+      ,:old.service_description
+      ,:old.service_fee
+      ,sys_context('USERENV', 'OS_USER')
+      ,:old.created_on
+      ,SYSDATE
+      ,'D'
+      ,:old.version + 1);
   ELSE
-  
+    INSERT INTO service_log_h
+      (service_id
+      ,car_id
+      ,from_date
+      ,to_date
+      ,service_description
+      ,service_fee
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:new.service_id
+      ,:new.car_id
+      ,:new.from_date
+      ,:new.to_date
+      ,:new.service_description
+      ,:new.service_fee
+      ,:new.mod_user
+      ,:new.created_on
+      ,:new.last_mod
+      ,:new.dml_flag
+      ,:new.version);
   END IF;
 END;
 /
@@ -362,9 +458,51 @@ CREATE OR REPLACE TRIGGER trg_reserve_h
 BEGIN
   IF (deleting)
   THEN
-  
+    INSERT INTO reserve_h
+      (reserve_id
+      ,customer_id
+      ,car_id
+      ,from_date
+      ,to_date
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:old.reserve_id
+      ,:old.customer_id
+      ,:old.car_id
+      ,:old.from_date
+      ,:old.to_date
+      ,sys_context('USERENV', 'OS_USER')
+      ,:old.created_on
+      ,SYSDATE
+      ,'D'
+      ,:old.version + 1);
   ELSE
-  
+    INSERT INTO reserve_h
+      (reserve_id
+      ,customer_id
+      ,car_id
+      ,from_date
+      ,to_date
+      ,mod_user
+      ,created_on
+      ,last_mod
+      ,dml_flag
+      ,version)
+    VALUES
+      (:new.reserve_id
+      ,:new.customer_id
+      ,:new.car_id
+      ,:new.from_date
+      ,:new.to_date
+      ,:new.mod_user
+      ,:new.created_on
+      ,:new.last_mod
+      ,:new.dml_flag
+      ,:new.version);
   END IF;
 END;
 /
