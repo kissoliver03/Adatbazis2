@@ -56,7 +56,7 @@ Az adatbázis felépítéséhez az alábbi sorrendben szükséges lefuttatni a f
     * `Tests/Add new rental.tst`
         *(Új autóbérlés autó ID, bérlés kezdeti ideje és bérlés vég ideje megadása alapján.)*
     * `Tests/List cars by category.tst`
-        *(Elérhető státuszú autók listázása dinamikus querry használatával autó kategória megadása alapján.)*
+        *(Elérhető státuszú autók listázása dinamikus query használatával autó kategória megadása alapján.)*
     * `Tests/Return car.tst`
         *(Autóbérlés befejezése autó ID megadása alapján.)*
     * `Tests/Cancel reservation.tst`
@@ -65,7 +65,7 @@ Az adatbázis felépítéséhez az alábbi sorrendben szükséges lefuttatni a f
         *(Autó megnézése, hogy szabad-e adott időintervallumra autó ID, kezdeti és vég időpont megadása alapján.)*
     * `Tests/Get all customers rentals summary.tst`
         *(Customerek bérlési statisztikái megnézése.)*
-    * `Tests/get customer rental history.tst`
+    * `Tests/Get customer rental history.tst`
         *(Customer bérlési előzményei customer ID megadása alapján.)*
     * `Tests/Send car to service.tst`
         *(Autó szervízbe küldése.)*
@@ -76,3 +76,5 @@ Az adatbázis felépítéséhez az alábbi sorrendben szükséges lefuttatni a f
 * **Adatbázis:** Oracle Database
 * **Nyelv:** PL/SQL
 * **Eszközök:** SQL Developer / Datagrip
+
+Project Status: Finalized and delivered (2025-12-19)
