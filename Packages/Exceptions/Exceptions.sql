@@ -14,5 +14,6 @@ CREATE OR REPLACE PACKAGE pkg_exceptions IS
 
   customer_not_valid EXCEPTION;
   PRAGMA EXCEPTION_INIT(customer_not_valid, -20040);
+ 
 
 END pkg_exceptions;

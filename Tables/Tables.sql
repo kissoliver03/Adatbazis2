@@ -38,7 +38,7 @@ car_id number constraint service_log_car_id_fk references car(car_id) NOT NULL,
 from_date DATE default sysdate not null,
 to_date date not null,
 service_description varchar2(4000),
-service_fee number
+service_fee number not null
 );
 
 create table error_log(
